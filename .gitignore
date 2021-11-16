@@ -1,9 +1,3 @@
-consideracoes.txt
-<<<<<<< HEAD
-serverless
 node_modules
-jspm_packages
-=======
-deploy.zip 
-node_modules
->>>>>>> parent of 75e4984... refactor: changing from lambda to serveless and feating endpoint
+/.serverless
+.npmignore
