@@ -19,5 +19,9 @@
   "homepage": "https://github.com/giosassis/serveless-api#readme",
   "devDependencies": {
     "serverless-offline": "^8.2.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1029.0",
+    "uuid": "^8.3.2"
   }
 }
