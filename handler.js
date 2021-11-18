@@ -1,19 +1,14 @@
 "use strict";
-const pacientes = [
-  { id: 1, nome: "Maria", dataNascimento: "1984-11-01" },
-  { id: 2, nome: "Joao", dataNascimento: "1980-01-16" },
-  { id: 3, nome: "Jose", dataNascimento: "1998-06-06" },
-];
 
 const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const params = {
-  TableName: "PACIENTES",
+  TableName: "PATIENTS",
 };
 
-module.exports.listarPacientes = async (event) => {
+module.exports.getPacient = async (event) => {
   try {
     let data = await dynamoDb.scan(params).promise();
 
@@ -34,16 +29,16 @@ module.exports.listarPacientes = async (event) => {
   }
 };
 
-module.exports.obterPaciente = async (event) => {
+module.exports.getPacientByID = async (event) => {
   try {
-    const { pacienteId } = event.pathParameters;
+    const { patientId } = event.pathParameters;
 
     const data = await dynamoDb
       .get({
         //select from where id
         ...params,
         Key: {
-          paciente_id: pacienteId,
+          patient_id: patientId,
         },
       })
       .promise();
@@ -51,15 +46,14 @@ module.exports.obterPaciente = async (event) => {
     if (!data.Item) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: "Paciente não existe" }, null, 2),
+        body: JSON.stringify({ error: "Patient not found" }, null, 2),
       };
     }
-
-    const paciente = data.Item;
+    const patient = data.Item;
 
     return {
       statusCode: 200,
-      body: JSON.stringify(paciente, null, 2),
+      body: JSON.stringify(patient, null, 2),
     };
   } catch (err) {
     console.log("Error", err);
@@ -73,29 +67,29 @@ module.exports.obterPaciente = async (event) => {
   }
 };
 
-module.exports.cadastrarPaciente = async (event) => {
+module.exports.postPatient = async (event) => {
   try {
     const timestamp = new Date().getTime();
 
-    let dados = JSON.parse(event.body);
+    let data = JSON.parse(event.body);
 
-    const { nome, data_nascimento, email, telefone } = dados;
+    const { name, birthdate, email, phoneNumber } = data;
 
-    const paciente = {
-      paciente_id: uuidv4(),
-      nome,
-      data_nascimento,
+    const patient = {
+      patientId: uuidv4(),
+      name,
+      birthdate,
       email,
-      telefone,
+      phoneNumber,
       status: true,
-      criado_em: timestamp,
-      atualizado_em: timestamp,
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
 
     await dynamoDb
       .put({
-        TableName: "PACIENTES",
-        Item: paciente,
+        TableName: "PATIENTS",
+        Item: patient,
       })
       .promise();
 
@@ -114,35 +108,35 @@ module.exports.cadastrarPaciente = async (event) => {
   }
 };
 
-module.exports.atualizarPaciente = async (event) => {  
-  const { pacienteId } = event.pathParameters
+module.exports.updatePatient = async (event) => {
+  const { patientId } = event.pathParameters;
 
   try {
     const timestamp = new Date().getTime();
 
-    let dados = JSON.parse(event.body);
+    let data = JSON.parse(event.body);
 
-    const { nome, data_nascimento, email, telefone } = dados;
+    const { name, birthdate, email, phoneNumber } = data;
 
     await dynamoDb
       .update({
         ...params,
         Key: {
-          paciente_id: pacienteId
+          patient_id: patientId,
         },
         UpdateExpression:
-          'SET nome = :nome, data_nascimento = :dt, email = :email,' 
-          + ' telefone = :telefone, atualizado_em = :atualizado_em',
-        ConditionExpression: 'attribute_exists(paciente_id)',
+          "SET nome = :name, birthdate = :dt, email = :email," +
+          " phoneNumber = :phoneNumber, updatedAt = :updatedAt",
+        ConditionExpression: "attribute_exists(patient_id)",
         ExpressionAttributeValues: {
-          ':nome': nome,
-          ':dt': data_nascimento,
-          ':email': email,
-          ':telefone': telefone,
-          ':atualizado_em': timestamp
-        }
+          ":name": name,
+          ":bd": birthdate,
+          ":email": email,
+          ":phoneNumber": phoneNumber,
+          ":updatedAt": timestamp,
+        },
       })
-      .promise()
+      .promise();
 
     return {
       statusCode: 204,
@@ -154,9 +148,9 @@ module.exports.atualizarPaciente = async (event) => {
     let message = err.message ? err.message : "Unknown error";
     let statusCode = err.statusCode ? err.statusCode : 500;
 
-    if (error == 'ConditionalCheckFailedException') {
-      error = 'Paciente não existe';
-      message = `Recurso com o ID ${pacienteId} não existe e não pode ser atualizado`;
+    if (error == "ConditionalCheckFailedException") {
+      error = "This patient does not exists";
+      message = `This ${patientId} does not exists or cant not be updated`;
       statusCode = 404;
     }
 
@@ -164,29 +158,29 @@ module.exports.atualizarPaciente = async (event) => {
       statusCode,
       body: JSON.stringify({
         error,
-        message
+        message,
       }),
     };
   }
 };
 
-module.exports.excluirPaciente = async event => {
-  const { pacienteId } = event.pathParameters
+module.exports.deletePatient = async (event) => {
+  const { patientId } = event.pathParameters;
 
   try {
     await dynamoDb
       .delete({
         ...params,
         Key: {
-          paciente_id: pacienteId
+          patient_id: patientId,
         },
-        ConditionExpression: 'attribute_exists(paciente_id)'
+        ConditionExpression: "attribute_exists(patient_id)",
       })
-      .promise()
- 
+      .promise();
+
     return {
-      statusCode: 204
-    }
+      statusCode: 204,
+    };
   } catch (err) {
     console.log("Error", err);
 
@@ -194,9 +188,9 @@ module.exports.excluirPaciente = async event => {
     let message = err.message ? err.message : "Unknown error";
     let statusCode = err.statusCode ? err.statusCode : 500;
 
-    if (error == 'ConditionalCheckFailedException') {
-      error = 'Paciente não existe';
-      message = `Recurso com o ID ${pacienteId} não existe e não pode ser atualizado`;
+    if (error == "ConditionalCheckFailedException") {
+      error = "Patient not found.";
+      message = `The patient with ID ${patientId} does not exist or can't be deleted.`;
       statusCode = 404;
     }
 
@@ -204,8 +198,8 @@ module.exports.excluirPaciente = async event => {
       statusCode,
       body: JSON.stringify({
         error,
-        message
+        message,
       }),
     };
   }
-}
+};
