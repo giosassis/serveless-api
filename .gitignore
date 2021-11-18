@@ -1,4 +1,7 @@
 node_modules
-/.serverless
+.serverless
 .npmignore
+.patient-record/.serverless
+.patient-record/node_modules
+.patient-record/.vscode
 consideracoes.txt
