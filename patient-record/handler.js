@@ -164,3 +164,43 @@ module.exports.updatePatient = async (event) => {
     };
   }
 };
+
+module.exports.deletePatient = async (event) => {
+  const { patientId } = event.pathParameters;
+
+  try {
+    await dynamoDb
+      .delete({
+        ...params,
+        Key: {
+          patient_id: patientId,
+        },
+        ConditionExpression: "attribute_exists(patient_id)",
+      })
+      .promise();
+
+    return {
+      statusCode: 204,
+    };
+  } catch (err) {
+    console.log("Error", err);
+
+    let error = err.name ? err.name : "Exception";
+    let message = err.message ? err.message : "Unknown error";
+    let statusCode = err.statusCode ? err.statusCode : 500;
+
+    if (error == "ConditionalCheckFailedException") {
+      error = "Non-existent patient";
+      message = `Patient with ID ${patientId} cant be deleted or does not exists.`;
+      statusCode = 404;
+    }
+
+    return {
+      statusCode,
+      body: JSON.stringify({
+        error,
+        message,
+      }),
+    };
+  }
+};

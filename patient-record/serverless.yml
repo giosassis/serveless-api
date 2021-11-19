@@ -52,6 +52,13 @@ functions:
       - http:
           path: patients/{patientId}
           method: put
+  
+  deletePatient:
+    handler: handler.deletePatient
+    events:
+      - http:
+          path: patients/{patientId}
+          method: delete
 
 resources:
   Resources:
