@@ -22,11 +22,12 @@ iamRoleStatements:
         - dynamodb:DeleteItem
         - dynamodb:GetItem
         - dynamodb:UpdateItem
-      Resource: arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS
+      Resource: "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
 
 functions:
   getPacients:
     handler: handler.getPatients
+    role: lambdaRole
     events:
       - http:
           path: patients
@@ -34,6 +35,7 @@ functions:
 
   getPatientById:
     handler: handler.getPatientById
+    role: lambdaRole
     events:
       - http:
           path: patients/{patientId}
@@ -41,6 +43,7 @@ functions:
 
   postPatient:
     handler: handler.postPatient
+    role: lambdaRole
     events:
       - http:
           path: patients
@@ -48,6 +51,7 @@ functions:
   
   updatePatient:
     handler: handler.updatePatient
+    role: lambdaRole
     events:
       - http:
           path: patients/{patientId}
@@ -55,6 +59,7 @@ functions:
   
   deletePatient:
     handler: handler.deletePatient
+    role: lambdaRole
     events:
       - http:
           path: patients/{patientId}
@@ -75,3 +80,37 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    lambdaRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /service-role/
+        RoleName: lambdaRole
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: sts:AssumeRole
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+                - edgelambda.amazonaws.com
+        Policies:
+          - PolicyName: lambdaPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - "logs:CreateLogGroup"
+                - "logs:CreateLogStream"
+                - "logs:PutLogEvents"
+                Resource: "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:PutItem
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
