@@ -3,6 +3,7 @@ frameworkVersion: '2'
 
 plugins:
   - serverless-offline
+  - serverless-dynamodb-local
 
 provider:
   name: aws
@@ -23,6 +24,20 @@ iamRoleStatements:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
       Resource: "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
+
+custom:
+  dynamodb:
+    stages:
+      - dev 
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+
+
+
 
 functions:
   getPacients:
