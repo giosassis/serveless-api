@@ -1,15 +1,56 @@
 const chai = require("chai");
-const chaiHttp = require("chai-http");
-const app = require("../handler");
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai')
 
-chai.expect();
-chai.use(chaiHttp);
+const proxyquire = require('proxyquire').noCallThru()
+const { expect } = chai
+
+chai.should();
+chai.use(sinonChai);
+
+const patients = [{ Name: "John" }]
+
+function createDocumentClientMock() {
+  const scanSpy = sinon.spy(() => ({
+    promise: async () => ({
+      Items: patients
+    })
+  }))
+
+  const getSpy = sinon.spy(() => ({
+    promise: async () => ({
+      Items: [{ Name: "John" }]
+    })
+  }))
+
+  const DocumentClient = class {
+    constructor() {
+      this.scan = scanSpy
+      this.get = getSpy
+    }
+  };
+
+  return { DocumentClient, spy: { scanSpy } };
+}
+
+function createHandler(mock) {
+  return proxyquire('../../handler', {
+    'aws-sdk': {
+      DynamoDB: {
+        DocumentClient: mock.DocumentClient
+      }
+    }
+  })
+}
 
 describe("API Patients", () => {
   describe("GET /patients", () => {
-    it("should return a list of patients", (done) => {
-      chai.request("https://ri0ic4hh2m.execute-api.us-east-1.amazonaws.com/dev/patients")
-      .get("/patients");
+    it("should return a list of patients", async () => {
+      const mock = createDocumentClientMock();
+      const api = createHandler(mock);
+      const response = await api.getPacient();
+      expect(response.statusCode).to.be.equal(200);
+      expect(mock.spy.scanSpy).to.have.been.called;
     });
   });
 });
