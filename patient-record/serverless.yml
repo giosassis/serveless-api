@@ -1,0 +1,76 @@
+service: patient-record
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+  # you can overwrite defaults here
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
+
+functions:
+  getPacient:
+    handler: handler.getPacient
+    events:
+      - http:
+          path: patient
+          method: get
+
+  getPacientByID:
+    handler: handler.getPacientByID
+    events:
+      - http:
+          path: patient/{patientId}
+          method: get
+
+  postPatient:
+    handler: handler.postPatient
+    events:
+      - http:
+          path: patient/
+          method: post
+
+  updatePatient:
+    handler: handler.updatePatient
+    events:
+      - http:
+          path: patient/{patientId}
+          method: put
+
+  deletePatient:
+    handler: handler.deletePatient
+    events:
+      - http:
+          path: patient/{patientId}
+          method: delete
+
+resources:
+  Resources:
+    PatientsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Patients
+        AttributeDefinitions:
+          - AttributeName: patient_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: patient_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+
