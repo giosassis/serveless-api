@@ -1,44 +1,56 @@
-const sinon = require("sinon");
-const proxyquire = require("proxyquire").noCallThru;
+const chai = require("chai");
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai')
 
+const proxyquire = require('proxyquire').noCallThru()
+const { expect } = chai
 
-describe("DynamoDB Mock Test", () => {
-  let AWS;
-  let getPatient;
+chai.should();
+chai.use(sinonChai);
 
-  before(() => {
-    getPatient = sinon.stub();
+const patients = [{ id: 2, name: "John", birthDate: "1980-01-16" }]
 
-    AWS = {
+function createDocumentClientMock() {
+  const scanSpy = sinon.spy(() => ({
+    promise: async () => ({
+      Items: patients
+    })
+  }))
+
+  const getSpy = sinon.spy(() => ({
+    promise: async () => ({
+      Items: [{ id: 2, name: "John", birthDate: "1980-01-16" }]
+    })
+  }))
+
+  const DocumentClient = class {
+    constructor() {
+      this.scan = scanSpy
+      this.get = getSpy
+    }
+  };
+
+  return { DocumentClient, spy: { scanSpy } };
+}
+
+function createHandler(mock) {
+  return proxyquire('../../handler', {
+    'aws-sdk': {
       DynamoDB: {
-        DocumentClient: sinon.stub().returns({
-          query: getPatient,
-        }),
-      },
-    };
-  });
-
-  scriptToTest = proxyquire("../handler.js", {
-    "aws-sdk": AWS,
-  });
-});
-
-it("should return should return 200", async () => {
-  getPatient.get.withArgs(sinon.match.any).yelds(null, {statusCode: 200});
-});
-
-/*const chai = require("chai");
-const chaiHttp = require("chai-http");
-const app = require("../handler");
-
-chai.expect();
-chai.use(chaiHttp);
+        DocumentClient: mock.DocumentClient
+      }
+    }
+  })
+}
 
 describe("API Patients", () => {
   describe("GET /patients", () => {
-    it("should return a list of patients", (done) => {
-      chai.request("http://localhost:3000/dev/patients")
-      .get("/patients");
+    it("should return a list of patients", async () => {
+      const mock = createDocumentClientMock();
+      const api = createHandler(mock);
+      const response = await api.getPacient();
+      expect(response.statusCode).to.be.equal(200);
+      expect(mock.spy.scanSpy).to.have.been.called;
     });
   });
-});*/
+});
