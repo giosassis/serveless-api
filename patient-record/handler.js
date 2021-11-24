@@ -1,47 +1,42 @@
 "use strict";
-
-const patient = [
-  { id: 1, nome: "Mary", birthdate: 1984 - 11 - 01 },
-  { id: 2, nome: "John", birthdate: 1990 - 11 - 01 },
-  { id: 3, nome: "Josh", birthdate: 1998 - 06 - 06 },
+const patients = [
+  { id: 1, name: "Mary", birthDate: "1984-11-01" },
+  { id: 2, name: "John", birthDate: "1980-01-16" },
+  { id: 3, name: "Josh", birthDate: "1998-06-06" },
 ];
 
-const AWS = require("aws-sdk");
 const { v4: uuidv4 } = require("uuid");
+const AWS = require("aws-sdk");
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const params = {
-  TableName: "Patients",
+  TableName: "PATIENTS",
 };
 
-module.exports.getPacient = async (event) => {
+module.exports.getPatients = async (event) => {
   try {
     let data = await dynamoDb.scan(params).promise();
-
     return {
       statusCode: 200,
       body: JSON.stringify(data.Items),
     };
   } catch (err) {
-    console.error(err);
-
     return {
-      statusCode: 500,
+      statusCode: err.statusCode ? err.statusCode : 500,
       body: JSON.stringify({
-        error: err.name ? err.name : "Exception",
+        errorerror: err.name ? err.name : "Exceptions",
         message: err.message ? err.message : "Unknown error",
       }),
     };
   }
 };
 
-module.exports.getPacientByID = async (event) => {
+module.exports.getPatientById = async (event) => {
   try {
     const { patientId } = event.pathParameters;
 
     const data = await dynamoDb
       .get({
-        //select from where id
         ...params,
         Key: {
           patient_id: patientId,
@@ -52,9 +47,10 @@ module.exports.getPacientByID = async (event) => {
     if (!data.Item) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: "Patient not found" }, null, 2),
+        body: JSON.stringify({ error: "This patient does not exists" }),
       };
     }
+
     const patient = data.Item;
 
     return {
@@ -62,12 +58,11 @@ module.exports.getPacientByID = async (event) => {
       body: JSON.stringify(patient, null, 2),
     };
   } catch (err) {
-    console.log("Error", err);
     return {
       statusCode: err.statusCode ? err.statusCode : 500,
       body: JSON.stringify({
-        error: err.name ? err.name : "Exception",
-        message: err.message ? err.message : "Unknown error",
+        err: err.name ? err.name : "Exception",
+        message: err.message ? err.message : "Unknow error",
       }),
     };
   }
@@ -75,16 +70,16 @@ module.exports.getPacientByID = async (event) => {
 
 module.exports.postPatient = async (event) => {
   try {
-    const timestamp = new Date().getTime();
+    console.log(event);
+    const timestamp = new Date().getTime;
 
     let data = JSON.parse(event.body);
-
-    const { name, birthdate, email, phoneNumber } = data;
+    const { name, birthDate, email, phoneNumber } = data;
 
     const patient = {
-      patientId: uuidv4(),
+      patient_id: uuidv4(),
       name,
-      birthdate,
+      birthDate,
       email,
       phoneNumber,
       status: true,
@@ -101,14 +96,14 @@ module.exports.postPatient = async (event) => {
 
     return {
       statusCode: 201,
+      body: JSON.stringify({ message: "Successfully created patient" }),
     };
   } catch (err) {
-    console.log("Error", err);
     return {
       statusCode: err.statusCode ? err.statusCode : 500,
       body: JSON.stringify({
-        error: err.name ? err.name : "Exception",
-        message: err.message ? err.message : "Unknown error",
+        err: err.name ? err.name : "Exception",
+        message: err.message ? err.message : "Unknow error",
       }),
     };
   }
@@ -122,7 +117,7 @@ module.exports.updatePatient = async (event) => {
 
     let data = JSON.parse(event.body);
 
-    const { name, birthdate, email, phoneNumber } = data;
+    const { name, birthDate, email, phoneNumber } = data;
 
     await dynamoDb
       .update({
@@ -131,12 +126,12 @@ module.exports.updatePatient = async (event) => {
           patient_id: patientId,
         },
         UpdateExpression:
-          "SET nome = :name, birthdate = :dt, email = :email," +
+          "SET name = :name, birthDate = :bd, email = :email," +
           " phoneNumber = :phoneNumber, updatedAt = :updatedAt",
         ConditionExpression: "attribute_exists(patient_id)",
         ExpressionAttributeValues: {
           ":name": name,
-          ":bd": birthdate,
+          ":bd": birthDate,
           ":email": email,
           ":phoneNumber": phoneNumber,
           ":updatedAt": timestamp,
@@ -156,7 +151,7 @@ module.exports.updatePatient = async (event) => {
 
     if (error == "ConditionalCheckFailedException") {
       error = "This patient does not exists";
-      message = `This ${patientId} does not exists or cant not be updated`;
+      message = `It was not possible to update the patient${patientId}`;
       statusCode = 404;
     }
 
@@ -171,6 +166,7 @@ module.exports.updatePatient = async (event) => {
 };
 
 module.exports.deletePatient = async (event) => {
+  console.log(event)
   const { patientId } = event.pathParameters;
 
   try {
@@ -195,8 +191,8 @@ module.exports.deletePatient = async (event) => {
     let statusCode = err.statusCode ? err.statusCode : 500;
 
     if (error == "ConditionalCheckFailedException") {
-      error = "Patient not found.";
-      message = `The patient with ID ${patientId} does not exist or can't be deleted.`;
+      error = "Non-existent patient";
+      message = `Patient with ID ${patientId} cant be deleted or does not exists.`;
       statusCode = 404;
     }
 

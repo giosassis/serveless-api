@@ -71,16 +71,16 @@
         }
       }
     },
-    "GetPacientLogGroup": {
+    "GetPacientsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/patient-record-dev-getPacient"
+        "LogGroupName": "/aws/lambda/patient-record-dev-getPacients"
       }
     },
-    "GetPacientByIDLogGroup": {
+    "GetPatientByIdLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/patient-record-dev-getPacientByID"
+        "LogGroupName": "/aws/lambda/patient-record-dev-getPatientById"
       }
     },
     "PostPatientLogGroup": {
@@ -101,143 +101,56 @@
         "LogGroupName": "/aws/lambda/patient-record-dev-deletePatient"
       }
     },
-    "IamRoleLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "patient-record",
-                  "dev",
-                  "lambda"
-                ]
-              ]
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogStream",
-                    "logs:CreateLogGroup"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/patient-record-dev*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/patient-record-dev*:*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "dynamodb:Query",
-                    "dynamodb:Scan",
-                    "dynamodb:PutItem",
-                    "dynamodb:DeleteItem",
-                    "dynamodb:GetItem",
-                    "dynamodb:UpdateItem"
-                  ],
-                  "Resource": "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS\""
-                }
-              ]
-            }
-          }
-        ],
-        "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "patient-record",
-              "dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
-      }
-    },
-    "GetPacientLambdaFunction": {
+    "GetPacientsLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/patient-record/dev/1637238076793-2021-11-18T12:21:16.793Z/patient-record.zip"
+          "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
         },
-        "Handler": "handler.getPacient",
+        "Handler": "handler.getPatients",
         "Runtime": "nodejs12.x",
-        "FunctionName": "patient-record-dev-getPacient",
+        "FunctionName": "patient-record-dev-getPacients",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "lambdaRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "GetPacientLogGroup"
+        "GetPacientsLogGroup",
+        "lambdaRole"
       ]
     },
-    "GetPacientByIDLambdaFunction": {
+    "GetPatientByIdLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/patient-record/dev/1637238076793-2021-11-18T12:21:16.793Z/patient-record.zip"
+          "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
         },
-        "Handler": "handler.getPacientByID",
+        "Handler": "handler.getPatientById",
         "Runtime": "nodejs12.x",
-        "FunctionName": "patient-record-dev-getPacientByID",
+        "FunctionName": "patient-record-dev-getPatientById",
         "MemorySize": 1024,
         "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "lambdaRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "GetPacientByIDLogGroup"
+        "GetPatientByIdLogGroup",
+        "lambdaRole"
       ]
     },
     "PostPatientLambdaFunction": {
@@ -247,7 +160,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/patient-record/dev/1637238076793-2021-11-18T12:21:16.793Z/patient-record.zip"
+          "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
         },
         "Handler": "handler.postPatient",
         "Runtime": "nodejs12.x",
@@ -256,13 +169,14 @@
         "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "lambdaRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "PostPatientLogGroup"
+        "PostPatientLogGroup",
+        "lambdaRole"
       ]
     },
     "UpdatePatientLambdaFunction": {
@@ -272,7 +186,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/patient-record/dev/1637238076793-2021-11-18T12:21:16.793Z/patient-record.zip"
+          "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
         },
         "Handler": "handler.updatePatient",
         "Runtime": "nodejs12.x",
@@ -281,13 +195,14 @@
         "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "lambdaRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "UpdatePatientLogGroup"
+        "UpdatePatientLogGroup",
+        "lambdaRole"
       ]
     },
     "DeletePatientLambdaFunction": {
@@ -297,7 +212,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/patient-record/dev/1637238076793-2021-11-18T12:21:16.793Z/patient-record.zip"
+          "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
         },
         "Handler": "handler.deletePatient",
         "Runtime": "nodejs12.x",
@@ -306,63 +221,64 @@
         "Timeout": 6,
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "lambdaRole",
             "Arn"
           ]
         }
       },
       "DependsOn": [
-        "DeletePatientLogGroup"
+        "DeletePatientLogGroup",
+        "lambdaRole"
       ]
     },
-    "GetPacientLambdaVersiontnJkVQc9WZ0KGMRfTZL06TU3sPuqAzAr5D36zZwyggE": {
+    "GetPacientsLambdaVersionAQzJ35wJyyoCEnm7AGRLIeNKLJwtuvr4VouiSbs3kA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
-          "Ref": "GetPacientLambdaFunction"
+          "Ref": "GetPacientsLambdaFunction"
         },
-        "CodeSha256": "KQOVIzzMArJ9uOkdl9x5V17vafp+p6hwX0WdQc4EiK4="
+        "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
       }
     },
-    "PostPatientLambdaVersionop8lqMYAcpdctkunVrJ7Ay3p3iKymsTLEoyHVs6Q": {
+    "GetPatientByIdLambdaVersionee8kls4TCibf3Jiekk9dFkhmMQOoyuXx7vineLb4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetPatientByIdLambdaFunction"
+        },
+        "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
+      }
+    },
+    "PostPatientLambdaVersionykYmjhKTvvtaRkwMsacOq5c0xGwaY5n2nZv8QW0hqE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "PostPatientLambdaFunction"
         },
-        "CodeSha256": "KQOVIzzMArJ9uOkdl9x5V17vafp+p6hwX0WdQc4EiK4="
+        "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
       }
     },
-    "GetPacientByIDLambdaVersionj6HXnq4CbOsngifMQysBftQ2zRtvp4XFwK40RsgY": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "GetPacientByIDLambdaFunction"
-        },
-        "CodeSha256": "KQOVIzzMArJ9uOkdl9x5V17vafp+p6hwX0WdQc4EiK4="
-      }
-    },
-    "UpdatePatientLambdaVersion9mS8ufQLMPhRFtwBwFWbki4z8OvY5JxotO8pzxuGUs": {
+    "UpdatePatientLambdaVersionjp36ugbnZNEwEt8VU3ty6z7yUmxQrDkPbNQsc9YfCc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdatePatientLambdaFunction"
         },
-        "CodeSha256": "KQOVIzzMArJ9uOkdl9x5V17vafp+p6hwX0WdQc4EiK4="
+        "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
       }
     },
-    "DeletePatientLambdaVersionXZ6ItmUyOxAqxoVYvBfk5Oq19UwDb72XYGp5cQ": {
+    "DeletePatientLambdaVersionPz56fapk5l2L6e30wkDOAXMwIBhnKsXMvSVC3WoGUG0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeletePatientLambdaFunction"
         },
-        "CodeSha256": "KQOVIzzMArJ9uOkdl9x5V17vafp+p6hwX0WdQc4EiK4="
+        "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
       }
     },
     "ApiGatewayRestApi": {
@@ -377,7 +293,7 @@
         "Policy": ""
       }
     },
-    "ApiGatewayResourcePatient": {
+    "ApiGatewayResourcePatients": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
@@ -386,17 +302,17 @@
             "RootResourceId"
           ]
         },
-        "PathPart": "patient",
+        "PathPart": "patients",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
       }
     },
-    "ApiGatewayResourcePatientPatientidVar": {
+    "ApiGatewayResourcePatientsPatientidVar": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Ref": "ApiGatewayResourcePatient"
+          "Ref": "ApiGatewayResourcePatients"
         },
         "PathPart": "{patientId}",
         "RestApiId": {
@@ -404,13 +320,13 @@
         }
       }
     },
-    "ApiGatewayMethodPatientGet": {
+    "ApiGatewayMethodPatientsGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourcePatient"
+          "Ref": "ApiGatewayResourcePatients"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -435,7 +351,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "GetPacientLambdaFunction",
+                    "GetPacientsLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -447,16 +363,16 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "GetPacientLambdaPermissionApiGateway"
+        "GetPacientsLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayMethodPatientPatientidVarGet": {
+    "ApiGatewayMethodPatientsPatientidVarGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "GET",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourcePatientPatientidVar"
+          "Ref": "ApiGatewayResourcePatientsPatientidVar"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -481,7 +397,7 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "GetPacientByIDLambdaFunction",
+                    "GetPatientByIdLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -493,16 +409,16 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "GetPacientByIDLambdaPermissionApiGateway"
+        "GetPatientByIdLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayMethodPatientPost": {
+    "ApiGatewayMethodPatientsPost": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "POST",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourcePatient"
+          "Ref": "ApiGatewayResourcePatients"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -542,13 +458,13 @@
         "PostPatientLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayMethodPatientPatientidVarPut": {
+    "ApiGatewayMethodPatientsPatientidVarPut": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "PUT",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourcePatientPatientidVar"
+          "Ref": "ApiGatewayResourcePatientsPatientidVar"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -588,13 +504,13 @@
         "UpdatePatientLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayMethodPatientPatientidVarDelete": {
+    "ApiGatewayMethodPatientsPatientidVarDelete": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
         "HttpMethod": "DELETE",
         "RequestParameters": {},
         "ResourceId": {
-          "Ref": "ApiGatewayResourcePatientPatientidVar"
+          "Ref": "ApiGatewayResourcePatientsPatientidVar"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -634,7 +550,7 @@
         "DeletePatientLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1637238072639": {
+    "ApiGatewayDeployment1637759795573": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -643,19 +559,19 @@
         "StageName": "dev"
       },
       "DependsOn": [
-        "ApiGatewayMethodPatientGet",
-        "ApiGatewayMethodPatientPatientidVarGet",
-        "ApiGatewayMethodPatientPost",
-        "ApiGatewayMethodPatientPatientidVarPut",
-        "ApiGatewayMethodPatientPatientidVarDelete"
+        "ApiGatewayMethodPatientsGet",
+        "ApiGatewayMethodPatientsPatientidVarGet",
+        "ApiGatewayMethodPatientsPost",
+        "ApiGatewayMethodPatientsPatientidVarPut",
+        "ApiGatewayMethodPatientsPatientidVarDelete"
       ]
     },
-    "GetPacientLambdaPermissionApiGateway": {
+    "GetPacientsLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "GetPacientLambdaFunction",
+            "GetPacientsLambdaFunction",
             "Arn"
           ]
         },
@@ -687,12 +603,12 @@
         }
       }
     },
-    "GetPacientByIDLambdaPermissionApiGateway": {
+    "GetPatientByIdLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "GetPacientByIDLambdaFunction",
+            "GetPatientByIdLambdaFunction",
             "Arn"
           ]
         },
@@ -835,10 +751,10 @@
         }
       }
     },
-    "PatientsTable": {
+    "PacientesTables": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Patients",
+        "TableName": "PATIENTS",
         "AttributeDefinitions": [
           {
             "AttributeName": "patient_id",
@@ -856,6 +772,59 @@
           "WriteCapacityUnits": 1
         }
       }
+    },
+    "lambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": "/service-role/",
+        "RoleName": "lambdaRole",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "sts:AssumeRole",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com",
+                  "edgelambda.amazonaws.com"
+                ]
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "lambdaPolicy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:PutItem",
+                    "dynamodb:DeleteItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem"
+                  ],
+                  "Resource": "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   "Outputs": {
@@ -867,37 +836,37 @@
         "Name": "sls-patient-record-dev-ServerlessDeploymentBucketName"
       }
     },
-    "GetPacientLambdaFunctionQualifiedArn": {
+    "GetPacientsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetPacientLambdaVersiontnJkVQc9WZ0KGMRfTZL06TU3sPuqAzAr5D36zZwyggE"
+        "Ref": "GetPacientsLambdaVersionAQzJ35wJyyoCEnm7AGRLIeNKLJwtuvr4VouiSbs3kA"
       },
       "Export": {
-        "Name": "sls-patient-record-dev-GetPacientLambdaFunctionQualifiedArn"
+        "Name": "sls-patient-record-dev-GetPacientsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetPatientByIdLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetPatientByIdLambdaVersionee8kls4TCibf3Jiekk9dFkhmMQOoyuXx7vineLb4"
+      },
+      "Export": {
+        "Name": "sls-patient-record-dev-GetPatientByIdLambdaFunctionQualifiedArn"
       }
     },
     "PostPatientLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "PostPatientLambdaVersionop8lqMYAcpdctkunVrJ7Ay3p3iKymsTLEoyHVs6Q"
+        "Ref": "PostPatientLambdaVersionykYmjhKTvvtaRkwMsacOq5c0xGwaY5n2nZv8QW0hqE"
       },
       "Export": {
         "Name": "sls-patient-record-dev-PostPatientLambdaFunctionQualifiedArn"
       }
     },
-    "GetPacientByIDLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "GetPacientByIDLambdaVersionj6HXnq4CbOsngifMQysBftQ2zRtvp4XFwK40RsgY"
-      },
-      "Export": {
-        "Name": "sls-patient-record-dev-GetPacientByIDLambdaFunctionQualifiedArn"
-      }
-    },
     "UpdatePatientLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdatePatientLambdaVersion9mS8ufQLMPhRFtwBwFWbki4z8OvY5JxotO8pzxuGUs"
+        "Ref": "UpdatePatientLambdaVersionjp36ugbnZNEwEt8VU3ty6z7yUmxQrDkPbNQsc9YfCc"
       },
       "Export": {
         "Name": "sls-patient-record-dev-UpdatePatientLambdaFunctionQualifiedArn"
@@ -906,7 +875,7 @@
     "DeletePatientLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeletePatientLambdaVersionXZ6ItmUyOxAqxoVYvBfk5Oq19UwDb72XYGp5cQ"
+        "Ref": "DeletePatientLambdaVersionPz56fapk5l2L6e30wkDOAXMwIBhnKsXMvSVC3WoGUG0"
       },
       "Export": {
         "Name": "sls-patient-record-dev-DeletePatientLambdaFunctionQualifiedArn"
