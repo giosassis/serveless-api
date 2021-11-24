@@ -1,24 +1,24 @@
 {
-  "PACIENTES": [
+  "PATIENTS": [
     {
       "PutRequest": {
         "Item": {
-          "data_nascimento": {
+          "birthdate": {
             "S": "1984-01-01"
           },
           "email": {
             "S": "humberto@mail.com"
           },
-          "nome": {
+          "name": {
             "S": "Humberto"
           },
-          "paciente_id": {
+          "patientId": {
             "S": "1234-abc"
           },
           "status": {
             "BOOL": true
           },
-          "telefone": {
+          "phoneNumber": {
             "S": "11999995555"
           }
         }
@@ -27,22 +27,22 @@
     {
       "PutRequest": {
         "Item": {
-          "data_nascimento": {
+          "birthdate": {
             "S": "1975-01-01"
           },
           "email": {
             "S": "maria@mail.com"
           },
-          "nome": {
+          "name": {
             "S": "Maria"
           },
-          "paciente_id": {
+          "patientId": {
             "S": "1234-def"
           },
           "status": {
             "BOOL": true
           },
-          "telefone": {
+          "phoneNumber": {
             "S": "11999995550"
           }
         }
@@ -51,22 +51,22 @@
     {
       "PutRequest": {
         "Item": {
-          "data_nascimento": {
+          "birthdate": {
             "S": "1990-01-01"
           },
           "email": {
             "S": "carol@mail.com"
           },
-          "nome": {
+          "name": {
             "S": "Carolina"
           },
-          "paciente_id": {
+          "patientId": {
             "S": "523-xxx"
           },
           "status": {
             "BOOL": true
           },
-          "telefone": {
+          "phoneNumber": {
             "S": "11999990000"
           }
         }
@@ -75,22 +75,22 @@
     {
       "PutRequest": {
         "Item": {
-          "data_nascimento": {
+          "birthdate": {
             "S": "2006-01-01"
           },
           "email": {
             "S": "natalia@mail.com"
           },
-          "nome": {
+          "name": {
             "S": "Natalia"
           },
-          "paciente_id": {
+          "patientId": {
             "S": "621-nnn"
           },
           "status": {
             "BOOL": true
           },
-          "telefone": {
+          "phoneNumber": {
             "S": "11999998877"
           }
         }

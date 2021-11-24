@@ -1,4 +1,4 @@
-service: cadastro-pacientes
+service: patient-record
 
 plugins:
   - serverless-offline
@@ -19,55 +19,55 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:GetItem
         - dynamodb:UpdateItem
-      Resource: arn:aws:dynamodb:us-east-1:952582097844:table/PACIENTES
+      Resource: arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS
 
 functions:
-  listarPacientes:
-    handler: handler.listarPacientes
+  getPacient:
+    handler: handler.getPacient
     events:
       - http:
-          path: pacientes
+          path: patient
           method: get
 
-  obterPaciente:
-    handler: handler.obterPaciente
+  getPacientByID:
+    handler: handler.getPacientByID
     events:
       - http:
-          path: pacientes/{pacienteId}
+          path: patient/{patientId}
           method: get
 
-  cadastrarPaciente:
-    handler: handler.cadastrarPaciente
+  postPatient:
+    handler: handler.postPatient
     events:
       - http:
-          path: pacientes/
+          path: patient/
           method: post
 
-  atualizarPaciente:
-    handler: handler.atualizarPaciente
+  updatePatient:
+    handler: handler.updatePatient
     events:
       - http:
-          path: pacientes/{pacienteId}
+          path: patient/{patientId}
           method: put
 
-  excluirPaciente:
-    handler: handler.excluirPaciente
+  deletePatient:
+    handler: handler.deletePatient
     events:
       - http:
-          path: pacientes/{pacienteId}
+          path: patient/{patientId}
           method: delete
-          
+
 resources:
   Resources:
-    PacientesTables:
+    PatientsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: PACIENTES
+        TableName: PATIENTS  
         AttributeDefinitions:
-          - AttributeName: paciente_id
+          - AttributeName: patient_id
             AttributeType: S
         KeySchema:
-          - AttributeName: paciente_id
+          - AttributeName: patient_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
