@@ -121,7 +121,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z/patient-record.zip"
+                "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
               },
               "Handler": "handler.getPatients",
               "Runtime": "nodejs12.x",
@@ -147,7 +147,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z/patient-record.zip"
+                "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
               },
               "Handler": "handler.getPatientById",
               "Runtime": "nodejs12.x",
@@ -173,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z/patient-record.zip"
+                "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
               },
               "Handler": "handler.postPatient",
               "Runtime": "nodejs12.x",
@@ -199,7 +199,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z/patient-record.zip"
+                "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
               },
               "Handler": "handler.updatePatient",
               "Runtime": "nodejs12.x",
@@ -225,7 +225,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z/patient-record.zip"
+                "S3Key": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z/patient-record.zip"
               },
               "Handler": "handler.deletePatient",
               "Runtime": "nodejs12.x",
@@ -244,54 +244,54 @@
               "lambdaRole"
             ]
           },
-          "GetPacientsLambdaVersionpGctebokwgYGDNdYcBdTccpz4uCAjE5qOhbEzjURU": {
+          "GetPacientsLambdaVersionAQzJ35wJyyoCEnm7AGRLIeNKLJwtuvr4VouiSbs3kA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPacientsLambdaFunction"
               },
-              "CodeSha256": "rxoKL4qF2mQBZbkkH5IhCvAqcD7rgvv7fnUAGoj9pNU="
+              "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
             }
           },
-          "GetPatientByIdLambdaVersionISV0UTGVATVoVLOfsfYjEK8KhTyP4UZRGVAKwwbAM": {
+          "GetPatientByIdLambdaVersionee8kls4TCibf3Jiekk9dFkhmMQOoyuXx7vineLb4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPatientByIdLambdaFunction"
               },
-              "CodeSha256": "rxoKL4qF2mQBZbkkH5IhCvAqcD7rgvv7fnUAGoj9pNU="
+              "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
             }
           },
-          "PostPatientLambdaVersionhlkO7aOG7d8hGJl49d89MY5MXU40KzFsuUYnLFnuJnI": {
+          "PostPatientLambdaVersionykYmjhKTvvtaRkwMsacOq5c0xGwaY5n2nZv8QW0hqE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PostPatientLambdaFunction"
               },
-              "CodeSha256": "rxoKL4qF2mQBZbkkH5IhCvAqcD7rgvv7fnUAGoj9pNU="
+              "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
             }
           },
-          "UpdatePatientLambdaVersionGHnitpa4zhphOVTLMeDiL6DdNIfcDlBdKNNaEL1c": {
+          "UpdatePatientLambdaVersionjp36ugbnZNEwEt8VU3ty6z7yUmxQrDkPbNQsc9YfCc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdatePatientLambdaFunction"
               },
-              "CodeSha256": "rxoKL4qF2mQBZbkkH5IhCvAqcD7rgvv7fnUAGoj9pNU="
+              "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
             }
           },
-          "DeletePatientLambdaVersion4DNpTn5CM2Bla7qHk0jTeXtlabWaCLNL8jBFwG3JpA": {
+          "DeletePatientLambdaVersionPz56fapk5l2L6e30wkDOAXMwIBhnKsXMvSVC3WoGUG0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeletePatientLambdaFunction"
               },
-              "CodeSha256": "rxoKL4qF2mQBZbkkH5IhCvAqcD7rgvv7fnUAGoj9pNU="
+              "CodeSha256": "pIvaACE1734b1BM3/6GsA8mqYT6EIbTwnAkjlOx4KVY="
             }
           },
           "ApiGatewayRestApi": {
@@ -563,7 +563,7 @@
               "DeletePatientLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1637584059585": {
+          "ApiGatewayDeployment1637759795573": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -852,7 +852,7 @@
           "GetPacientsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPacientsLambdaVersionpGctebokwgYGDNdYcBdTccpz4uCAjE5qOhbEzjURU"
+              "Ref": "GetPacientsLambdaVersionAQzJ35wJyyoCEnm7AGRLIeNKLJwtuvr4VouiSbs3kA"
             },
             "Export": {
               "Name": "sls-patient-record-dev-GetPacientsLambdaFunctionQualifiedArn"
@@ -861,7 +861,7 @@
           "GetPatientByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPatientByIdLambdaVersionISV0UTGVATVoVLOfsfYjEK8KhTyP4UZRGVAKwwbAM"
+              "Ref": "GetPatientByIdLambdaVersionee8kls4TCibf3Jiekk9dFkhmMQOoyuXx7vineLb4"
             },
             "Export": {
               "Name": "sls-patient-record-dev-GetPatientByIdLambdaFunctionQualifiedArn"
@@ -870,7 +870,7 @@
           "PostPatientLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PostPatientLambdaVersionhlkO7aOG7d8hGJl49d89MY5MXU40KzFsuUYnLFnuJnI"
+              "Ref": "PostPatientLambdaVersionykYmjhKTvvtaRkwMsacOq5c0xGwaY5n2nZv8QW0hqE"
             },
             "Export": {
               "Name": "sls-patient-record-dev-PostPatientLambdaFunctionQualifiedArn"
@@ -879,7 +879,7 @@
           "UpdatePatientLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdatePatientLambdaVersionGHnitpa4zhphOVTLMeDiL6DdNIfcDlBdKNNaEL1c"
+              "Ref": "UpdatePatientLambdaVersionjp36ugbnZNEwEt8VU3ty6z7yUmxQrDkPbNQsc9YfCc"
             },
             "Export": {
               "Name": "sls-patient-record-dev-UpdatePatientLambdaFunctionQualifiedArn"
@@ -888,7 +888,7 @@
           "DeletePatientLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeletePatientLambdaVersion4DNpTn5CM2Bla7qHk0jTeXtlabWaCLNL8jBFwG3JpA"
+              "Ref": "DeletePatientLambdaVersionPz56fapk5l2L6e30wkDOAXMwIBhnKsXMvSVC3WoGUG0"
             },
             "Export": {
               "Name": "sls-patient-record-dev-DeletePatientLambdaFunctionQualifiedArn"
@@ -1006,6 +1006,21 @@
       },
       "vpc": {}
     },
+    "custom": {
+      "dynamodb": {
+        "stages": [
+          "dev"
+        ],
+        "start": {
+          "port": 8000,
+          "inMemory": true,
+          "migrate": true
+        },
+        "migration": {
+          "dir": "offline/migrations"
+        }
+      }
+    },
     "plugins": [
       "serverless-offline"
     ],
@@ -1029,7 +1044,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetPacientsLambdaVersionpGctebokwgYGDNdYcBdTccpz4uCAjE5qOhbEzjURU"
+        "versionLogicalId": "GetPacientsLambdaVersionAQzJ35wJyyoCEnm7AGRLIeNKLJwtuvr4VouiSbs3kA"
       },
       "getPatientById": {
         "handler": "handler.getPatientById",
@@ -1049,7 +1064,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "GetPatientByIdLambdaVersionISV0UTGVATVoVLOfsfYjEK8KhTyP4UZRGVAKwwbAM"
+        "versionLogicalId": "GetPatientByIdLambdaVersionee8kls4TCibf3Jiekk9dFkhmMQOoyuXx7vineLb4"
       },
       "postPatient": {
         "handler": "handler.postPatient",
@@ -1069,7 +1084,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "PostPatientLambdaVersionhlkO7aOG7d8hGJl49d89MY5MXU40KzFsuUYnLFnuJnI"
+        "versionLogicalId": "PostPatientLambdaVersionykYmjhKTvvtaRkwMsacOq5c0xGwaY5n2nZv8QW0hqE"
       },
       "updatePatient": {
         "handler": "handler.updatePatient",
@@ -1089,7 +1104,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "UpdatePatientLambdaVersionGHnitpa4zhphOVTLMeDiL6DdNIfcDlBdKNNaEL1c"
+        "versionLogicalId": "UpdatePatientLambdaVersionjp36ugbnZNEwEt8VU3ty6z7yUmxQrDkPbNQsc9YfCc"
       },
       "deletePatient": {
         "handler": "handler.deletePatient",
@@ -1109,7 +1124,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "DeletePatientLambdaVersion4DNpTn5CM2Bla7qHk0jTeXtlabWaCLNL8jBFwG3JpA"
+        "versionLogicalId": "DeletePatientLambdaVersionPz56fapk5l2L6e30wkDOAXMwIBhnKsXMvSVC3WoGUG0"
       }
     },
     "resources": {
@@ -1221,6 +1236,9 @@
           "Resource": "arn:aws:dynamodb:us-east-1:952582097844:table/PATIENTS"
         }
       ],
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
@@ -1233,7 +1251,7 @@
     "artifact": "/home/giovanaa/ci&t/conteudos/apiserveless/patient-record/.serverless/patient-record.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/patient-record/dev/1637584064650-2021-11-22T12:27:44.650Z",
+    "artifactDirectoryName": "serverless/patient-record/dev/1637759801205-2021-11-24T13:16:41.205Z",
     "artifact": "patient-record.zip"
   }
 }

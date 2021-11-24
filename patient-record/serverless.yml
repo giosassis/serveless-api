@@ -3,7 +3,6 @@ frameworkVersion: '2'
 
 plugins:
   - serverless-offline
-  - serverless-dynamodb-local
 
 provider:
   name: aws
@@ -35,8 +34,6 @@ custom:
       migrate: true
     migration:
       dir: offline/migrations
-
-
 
 
 functions:

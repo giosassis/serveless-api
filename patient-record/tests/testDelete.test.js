@@ -71,17 +71,15 @@ function createHandler(mock) {
 }
 
 describe("API Patients", () => {
-  describe("DELETE /patients", () => {
+  describe("DELETE /patients/patientId", () => {
     it("should return status 204", async () => {
       const mock = createDocumentClientMock();
       const api = createHandler(mock);
       const response = await api.deletePatient({
-        event: {
-          pathParameters: {
-            patientId: "123-abc",
-          },
+        pathParameters: {
+          patientId: "123-abc",
         },
-      });
+    });
       expect(response.statusCode).to.be.equal(204);
       expect(mock.spy.deleteSpy).to.have.been.called;
     });

@@ -166,6 +166,7 @@ module.exports.updatePatient = async (event) => {
 };
 
 module.exports.deletePatient = async (event) => {
+  console.log(event)
   const { patientId } = event.pathParameters;
 
   try {
