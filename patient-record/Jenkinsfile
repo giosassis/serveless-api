@@ -11,7 +11,7 @@ pipeline {
 
         stage('Run unit test') {
             steps {
-                sh "echo TODO"  
+                sh "npm run test"  
             }
         }
 
