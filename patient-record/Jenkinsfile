@@ -4,14 +4,20 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git url: 'https://github.com/giosassis/serveless-api', branch: 'main' 
-                sh "npm i"  
+                git url: 'https://github.com/giosassis/serveless-api', branch: 'main'
+                dir ("patient-record") {
+                    sh "npm i"  
+                }
+                
             }
         }
 
         stage('Run unit test') {
             steps {
-                sh "npm run test"  
+                dir ("patient-record") {
+                    sh "npm run test"
+                }
+                  
             }
         }
 
